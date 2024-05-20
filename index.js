@@ -7,7 +7,7 @@ const searchInput = document.getElementById('storedName');
 async function onSearchChange(event) {
     const searchItem = event.target.value;
     try {
-        const moviesRes = await fetch(`http://www.omdbapi.com/?apikey=304612db&s=${searchItem}`);
+        const moviesRes = await fetch(`https://www.omdbapi.com/?apikey=304612db&s=${searchItem}`);
         
         if (!moviesRes.ok) {
             throw new Error('Network response was not ok ' + moviesRes.statusText);
