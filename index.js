@@ -5,17 +5,27 @@ const searchInput = document.getElementById('storedName');
 
 
 async function onSearchChange(event) {
-    const searchItem = event.target.value
-    const moviesRes = await fetch(`http://www.omdbapi.com/?apikey=304612db&s=${searchItem}`)
-    const data = await moviesRes.json()
-    setTimeout(() => {
-        if (data.Search) {
-            movieEl.innerHTML = data.Search.map((movie) => movieHTML(movie)).slice(0, 8).join('')
-        } else {
-            console.error('No Movies Found')
-            movieEl.innerHTML = '<p>No Movies Found</p>';
+    const searchItem = event.target.value;
+    try {
+        const moviesRes = await fetch(`http://www.omdbapi.com/?apikey=304612db&s=${searchItem}`);
+        
+        if (!moviesRes.ok) {
+            throw new Error('Network response was not ok ' + moviesRes.statusText);
         }
-    }, 2000)
+
+        const data = await moviesRes.json();
+        setTimeout(() => {
+            if (data.Search) {
+                movieEl.innerHTML = data.Search.map((movie) => movieHTML(movie)).slice(0, 8).join('')
+            } else {
+                console.error('No Movies Found')
+                movieEl.innerHTML = '<p>No Movies Found</p>';
+            }
+        }, 2000)
+    } catch (error) {
+        console.error('Fetch error: ', error);
+        movieEl.innerHTML = '<p>Failed to fetch movies. Please try again later.</p>';
+    }
     loadingSpinner()
     
 }
